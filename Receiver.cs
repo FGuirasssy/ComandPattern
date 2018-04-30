@@ -1,17 +1,21 @@
 ﻿using System;
+using ComandPattern.models;
+
 namespace ComandPattern
 {
     public class Receiver
     {
+
+        private DatabaseManager databaseManager = DatabaseManager.GetInstance();
         public Receiver(){}
 
-        public void Action() {
+        public void SaveMessage(Message message) {
             Console.WriteLine("Receiver.Action() called");
 
-            var DB = DatabaseManager.GetInstance();
-            DB.Connect();
-            DB.Close();
-
+            databaseManager.Connect();
+            databaseManager.Insert(message);
+            databaseManager.Close();
+               
         }
     }
 }

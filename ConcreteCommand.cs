@@ -1,4 +1,5 @@
 ﻿using System;
+using ComandPattern.models;
 namespace ComandPattern
 {
     public class ConcreteCommand : Command
@@ -8,9 +9,9 @@ namespace ComandPattern
             
         }
 
-		public override void Execute()
+        public override void ExecuteSaveMsg(Message message)
 		{
-            receiver.Action();
+            receiver.SaveMessage(message);
         }
 
 	}

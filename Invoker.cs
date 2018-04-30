@@ -1,4 +1,6 @@
 ﻿using System;
+using ComandPattern.models;
+
 namespace ComandPattern
 {
     public class Invoker
@@ -9,8 +11,8 @@ namespace ComandPattern
             _command = aCommand;
         }
 
-        public void ExecuteCommand(){
-            _command.Execute();
+        public void ExecuteCommand(Message message){
+            _command.ExecuteSaveMsg(message);
         }
     }
 

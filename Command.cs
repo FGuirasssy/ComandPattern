@@ -1,4 +1,5 @@
 ﻿using System;
+using ComandPattern.models;
 namespace ComandPattern
 {
     public abstract class Command
@@ -9,6 +10,6 @@ namespace ComandPattern
             receiver = aReceiver;
         }
 
-        public abstract void Execute();
+        public abstract void ExecuteSaveMsg(Message message);
     }
 }

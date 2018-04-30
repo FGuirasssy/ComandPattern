@@ -1,4 +1,5 @@
 ﻿using System;
+using ComandPattern.models;
 
 namespace ComandPattern
 {
@@ -14,7 +15,7 @@ namespace ComandPattern
             Invoker invoker = new Invoker();
 
             invoker.SetCommand(command);
-            invoker.ExecuteCommand();
+            invoker.ExecuteCommand(new Message("Hello World"));
 
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
+using ComandPattern.models;
 namespace ComandPattern
 {
     public class DatabaseManager
@@ -46,5 +47,29 @@ namespace ComandPattern
                 Console.WriteLine(e);
             }
         }
+
+
+        public void Insert(Message msg)
+        {
+            var cmdText = "INSERT INTO sample (message) VALUES (?message)";
+
+            try{
+                
+                var command = mySqlConnection.CreateCommand();
+                command.CommandText = cmdText;
+                command.Parameters.AddWithValue("?message", msg.GetContent());
+                var result = command.ExecuteNonQuery();
+
+                Console.WriteLine("Save reuslt is {0}\n", result);
+
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e);
+            }
+
+        }
+
     }
 }
