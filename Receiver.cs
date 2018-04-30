@@ -7,6 +7,11 @@ namespace ComandPattern
 
         public void Action() {
             Console.WriteLine("Receiver.Action() called");
+
+            var DB = DatabaseManager.GetInstance();
+            DB.Connect();
+            DB.Close();
+
         }
     }
 }
