@@ -14,5 +14,10 @@ namespace ComandPattern
             receiver.SaveMessage(message);
         }
 
+		public override void UndoSaveMsg(int level)
+		{
+            receiver.DeleteMessage(level);
+        }
+
 	}
 }

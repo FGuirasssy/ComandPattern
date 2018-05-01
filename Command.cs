@@ -11,5 +11,7 @@ namespace ComandPattern
         }
 
         public abstract void ExecuteSaveMsg(Message message);
+        public abstract void UndoSaveMsg(int level);
+
     }
 }

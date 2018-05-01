@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using ComandPattern.models;
+
 
 namespace ComandPattern
 {
@@ -15,8 +17,17 @@ namespace ComandPattern
             Invoker invoker = new Invoker();
 
             invoker.SetCommand(command);
-            invoker.ExecuteCommand(new Message("Hello World"));
 
+            var messages = new List<Message>{ new Message("Hello World"),
+                new Message("Design Pattern"), new Message("Hit me up"), 
+                new Message("You'd really call"),new Message("Hello! how are you?"),
+                new Message("It's a pain")};
+
+            messages.ForEach(delegate(Message message ) {
+                invoker.ExecuteCommand(message);
+            });
+
+            invoker.UndoCommand(2);
         }
     }
 }

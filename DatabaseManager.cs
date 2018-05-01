@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using ComandPattern.models;
+
+
 namespace ComandPattern
 {
     public class DatabaseManager
@@ -71,5 +74,89 @@ namespace ComandPattern
 
         }
 
+        public List<Message> getLastInsertID(int limit) {
+
+            var results = new List<Message>();
+
+            var commandText = "SELECT * FROM sample ORDER BY ID DESC LIMIT " + limit;
+
+            try{
+
+                var command = mySqlConnection.CreateCommand();
+                command.CommandText = commandText;
+
+                var reader = command.ExecuteReader();
+
+                while(reader.Read()) {
+                    
+                    var message = new Message();
+                    message.SetId(Int32.Parse(reader["id"].ToString()));
+                    message.SetContent(reader["message"].ToString());
+                    results.Add(message);
+                }
+
+                return results;
+
+            }catch(MySqlException e) {
+             
+                Console.WriteLine(e.ToString());
+            }
+
+            Close();
+            return null;
+        }
+
+        public void UndoSave(Message message) {
+            var queryText = "DELETE FROM sample WHERE id=@id";
+
+            try{
+            
+                Connect();
+                var command = mySqlConnection.CreateCommand();
+                command.CommandText = queryText;
+                command.Parameters.AddWithValue("@id", message.GetId());
+                command.ExecuteNonQuery();
+
+            }catch(MySqlException ex){
+                Console.WriteLine(ex.ToString());
+            }
+
+            Close();
+        }
+
+        public List<Message> GetAll()
+        {
+
+            var cmdText = "SELECT * FROM sample";
+            var models = new List<Message>();
+
+            try
+            {
+                Connect();
+
+                var command = mySqlConnection.CreateCommand();
+                command.CommandText = cmdText;
+
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var message = new Message();
+                    message.SetId(Int32.Parse(reader["id"].ToString()));
+                    message.SetContent(reader["message"].ToString());
+                    models.Add(message);
+                }
+
+                return models;
+
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return null;
+        }
     }
 }

@@ -14,6 +14,10 @@ namespace ComandPattern
         public void ExecuteCommand(Message message){
             _command.ExecuteSaveMsg(message);
         }
+
+        public void UndoCommand(int level) {
+            _command.UndoSaveMsg(level);
+        }
     }
 
 }
