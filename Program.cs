@@ -9,7 +9,6 @@ namespace ComandPattern
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
 
             Receiver receiver = new Receiver();
             Command command = new ConcreteCommand(receiver);
@@ -23,11 +22,10 @@ namespace ComandPattern
                 new Message("You'd really call"),new Message("Hello! how are you?"),
                 new Message("It's a pain")};
 
-            messages.ForEach(delegate(Message message ) {
-                invoker.ExecuteCommand(message);
-            });
+            messages.ForEach(invoker.ExecuteCommand);
 
             invoker.UndoCommand(2);
+
         }
     }
 }

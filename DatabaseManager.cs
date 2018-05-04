@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using ComandPattern.models;
+using System.IO;
+using System.Data.SQLite;
 
 
 namespace ComandPattern
@@ -12,15 +14,90 @@ namespace ComandPattern
 
         private MySqlConnection mySqlConnection;
 
+        private static SQLiteConnection sQLiteConnection;
+
+        private const string DATABASE_FILE = "databaseFile.db";
+
+        private const string DATABASE_SOURCE = "data source=" + DATABASE_FILE;
+
+
         private DatabaseManager(){}
 
         public static DatabaseManager GetInstance() {
             if(instance == null) {
                 instance = new DatabaseManager();
             }
+
             return instance;
         }
     
+    
+        public void CreateTable() {
+
+            var queryText = @"CREATE TABLE IF NOT EXISTS sample
+            ( [id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+            [content] VARCHAR(2048) NULL )";
+
+
+            if (!File.Exists(DATABASE_FILE))
+            {
+                SQLiteConnection.CreateFile(DATABASE_FILE);
+            }
+
+            try{
+                
+                sQLiteConnection = new SQLiteConnection(DATABASE_SOURCE);
+
+                sQLiteConnection.Open();
+                var deleteCommand = new SQLiteCommand("DROP TABLE IF EXISTS sample", sQLiteConnection);
+                deleteCommand.ExecuteNonQuery();
+                sQLiteConnection.Close();
+
+            }catch(SQLiteException e) {
+                Console.WriteLine(e.StackTrace);
+            }
+        }
+
+        public void AddAMessage(Message message) {
+
+            try {
+
+                sQLiteConnection.Open();
+                var command = new SQLiteCommand("INSERT INTO sample(content) VALUES (@content)",sQLiteConnection);
+                command.Prepare();
+
+                command.Parameters.AddWithValue("@content", message.GetContent());
+
+                command.ExecuteNonQuery();
+
+                //sQLiteConnection.Close();
+
+            }catch(SQLiteException excep) {
+                Console.WriteLine(excep.StackTrace);
+            }
+
+        }
+
+        public void PrintMessages() {
+
+            try{
+
+                var command = new SQLiteCommand(sQLiteConnection);
+                command.CommandText = "SELECT * FROM SAMPLE";
+                var reader = command.ExecuteReader();
+
+                while(reader.Read()) {
+
+                    Console.WriteLine("id : {0} \t content : {1}", reader["id"], reader["content"]);
+                }
+
+                sQLiteConnection.Close();
+
+
+            }catch(SQLiteException ex) {
+                Console.WriteLine(ex.StackTrace);
+            }
+        }
 
         public void Connect()
         {
@@ -39,6 +116,7 @@ namespace ComandPattern
             }
         }
 
+        
         public void Close(){
             try
             {

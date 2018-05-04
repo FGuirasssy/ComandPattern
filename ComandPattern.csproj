@@ -8,8 +8,17 @@
   <ItemGroup>
     <PackageReference Include="MySql.Data" Version="8.0.11" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.108" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="SQLiteManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\SQLite-1.0.66.0-managedonly-binaries\bin\ManagedOnly\System.Data.SQLite.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
